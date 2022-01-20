@@ -15,7 +15,6 @@ def print_guess_result(guess):
 
 def main():
     w = Wordle()
-    print(w.word)
     guesses = []
     while w.is_running():
         for guess in guesses:
