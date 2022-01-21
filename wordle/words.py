@@ -121,12 +121,15 @@ def get_top_n_words_by_freqs(words=None, n=5):
     return scores[:n]
 
 
+letter_set = set(ascii_lowercase)
 _WORDS = []
 _WORDS_SET = set()
-with open("../words") as f:
+with open("../wordfiles/words") as f:
     _WORDS = [w.strip() for w in f.readlines()]
     _WORDS = [w for w in _WORDS if len(w) == 5]
     _WORDS = omit_letters("ABCDEFGHIJKLMNOPQRSTUVWXYZ", _WORDS)
-    with open("../words2", 'w+') as f:
+    _WORDS = [w for w in _WORDS if set(w).issubset(letter_set)]
+
+    with open("../wordfiles/words2", 'w+') as f:
         f.write('\n'.join(_WORDS))
     _WORDS_SET = set(_WORDS)

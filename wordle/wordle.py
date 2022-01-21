@@ -6,17 +6,18 @@ class Wordle:
     CLOSE = 1
     MISS = 2
 
-    def __init__(self, word=None):
+    def __init__(self, word=None, max_guesses=6):
         self.word = word
         if word is None:
             self.word = get_random_word()
         self.guesses = []
         self.game_won = False
+        self.max_guesses = max_guesses
 
     def guess(self, guess):
         if not is_valid_word(guess):
             raise RuntimeError(f"Invalid Word: {guess}")
-        if len(self.guesses) == 6:
+        if len(self.guesses) >= self.max_guesses:
             raise RuntimeError("Game over")
 
         result = []
@@ -36,7 +37,7 @@ class Wordle:
         return result
 
     def is_running(self):
-        return len(self.guesses) < 6 and not self.game_won
+        return len(self.guesses) < self.max_guesses and not self.game_won
 
     def give_up(self):
         while self.is_running():

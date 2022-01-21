@@ -16,17 +16,25 @@ def print_guess_result(guess):
 def main():
     w = Wordle()
     guesses = []
+    guess = ''
     while w.is_running():
-        for guess in guesses:
-            print(f"       {print_guess_result(guess)}")
-        guess = input("Guess> ")
+        for g in guesses:
+            print(f"       {print_guess_result(g)}")
+        guess = input("\033[94;1mGuess> \033[0m")
         try:
             guesses.append(w.guess(guess))
 
         except RuntimeError as e:
-            print(str(e))
+            print(f"       \033[31;1m{str(e)}")
             if str(e).lower() == "game over":
                 break
+    for g in guesses:
+        print(f"       {print_guess_result(g)}")
+    if guess == w.word:
+        print(f"\033[1;94mCongratulations!\033[0m You found the word \033[32;1m{w.word} \033[0m"
+              f"in \033[32;1m{len(w.guesses)} tries\033[0m!!")
+    else:
+        print(f"\033[1;91mGame over!\033[0m The word you were looking for is \033[1;32m{w.word}\033[0m")
 
 
 if __name__ == '__main__':
