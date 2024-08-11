@@ -295,20 +295,34 @@ def main():
     parser.add_argument("-i", "--interactive", action="store_true", help="Run an interactive session")
     parser.add_argument("-n", "--num_choices", type=int, default=1, help="Number of choices to consider at each step")
     parser.add_argument("-b", "--batches", action='store_true', help="Run batches")
+    parser.add_argument("--first_words", default=None, help="First words to guess")
+
 
     args = parser.parse_args()
+
+    first_words = args.first_words
+    if first_words is not None:
+        first_words = first_words.split(' ')
+        for word in first_words:
+            if len(word) != 5:
+                raise ValueError(f"Invalid word {word}: must be length 5")
+            if word not in get_words():
+                raise ValueError(f"Invalid word {word}: not part of wordlist")
+
     if args.interactive:
-        interactive(n=args.num_choices)
+        interactive(n=args.num_choices, first_words=first_words)
         return
     elif args.batches:
         runs = []
         for i in range(args.batch_size):
             print(f"[[[\033[32;1mBatch {i+1} of {args.batch_size}\033[0m]]]")
-            runs.append(test(word=args.word, n=args.num_choices, verbose=args.verbose, print_summary=False))
+            runs.append(test(word=args.word, n=args.num_choices,
+                verbose=args.verbose, first_words=first_words,
+                print_summary=False))
         report_stats(runs)
 
     else:
-        test(word=args.word, verbose=args.verbose)
+        test(word=args.word, verbose=args.verbose, first_words=first_words)
 
 def test(word=None, first_words=None, n=1, verbose=False, print_summary=True, remaining_words_print_threshold=100):
     if word is None:
@@ -321,7 +335,7 @@ def test(word=None, first_words=None, n=1, verbose=False, print_summary=True, re
         print(f"  + \033[32;1mWon\033[0;1m with {n_guesses} guesses\033[0m")
     else:
         print(f"  + \033[31;1mLost with {n_guesses} guesses\033[0m")
-        
+
     root = path[0][2]
     if print_summary:
         print(f"    (\033[1mBeginning With \033[35;1m{len(root):5}\033[1m Words\033[0m)")
