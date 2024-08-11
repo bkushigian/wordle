@@ -1,12 +1,12 @@
-from wordle import Wordle
+from wordle import HIT, CLOSE, MISS, Wordle
 
 
-def print_guess_result(guess):
+def print_guess_result(guess, hint):
     result = []
-    for (let, status) in guess:
-        if status == Wordle.HIT:
+    for (let, status) in zip(guess.upper(), hint):
+        if status == HIT:
             result.append(f"\033[92m{let}\033[0m")
-        elif status == Wordle.CLOSE:
+        elif status == CLOSE:
             result.append(f"\033[93m{let}\033[0m")
         else:
             result.append(let)
