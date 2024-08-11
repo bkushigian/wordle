@@ -1,10 +1,10 @@
 from words import get_random_word, is_valid_word
 
+HIT = 2
+CLOSE = 1
+MISS = 0
 
 class Wordle:
-    HIT = 0
-    CLOSE = 1
-    MISS = 2
 
     def __init__(self, word=None, max_guesses=6):
         self.word = word
@@ -20,21 +20,21 @@ class Wordle:
         if len(self.guesses) >= self.max_guesses:
             raise RuntimeError("Game over")
 
-        result = []
         game_won = True
+        hint = []
         for (i, let) in enumerate(guess):
             if self.word[i] == let:
-                result.append((let, Wordle.HIT))
+                hint.append(HIT)
             elif let in self.word:
-                result.append((let, Wordle.CLOSE))
+                hint.append(CLOSE)
                 game_won = False
             else:
-                result.append((let, Wordle.MISS))
+                hint.append(MISS)
                 game_won = False
 
         self.game_won = game_won
-        self.guesses.append(result)
-        return result
+        self.guesses.append((guess, hint))
+        return tuple(hint)
 
     def is_running(self):
         return len(self.guesses) < self.max_guesses and not self.game_won

@@ -124,7 +124,7 @@ def get_top_n_words_by_freqs(words=None, n=5):
 letter_set = set(ascii_lowercase)
 _WORDS = []
 _WORDS_SET = set()
-with open("../wordfiles/words") as f:
+with open("../wordfiles/valid_wordle_words.txt") as f:
     _WORDS = [w.strip() for w in f.readlines()]
     _WORDS = [w for w in _WORDS if len(w) == 5]
     _WORDS = omit_letters("ABCDEFGHIJKLMNOPQRSTUVWXYZ", _WORDS)
